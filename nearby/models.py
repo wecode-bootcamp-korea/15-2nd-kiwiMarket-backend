@@ -1,6 +1,6 @@
 from django.db import models
 
-from user.models    import Address, User
+from user.models    import User, Address
 from product.models import MainCategory
 
 class NearbyCategory(models.Model):
@@ -22,7 +22,7 @@ class Nearby(models.Model):
     description     = models.CharField(max_length=2000)
     created_at      = models.DateTimeField(auto_now_add = True) 
     updated_at      = models.DateTimeField(auto_now = True)
-    comment         = models.ManyToManyField('user.User', through = 'NearbyComment')
+    comment_id      = models.ManyToManyField('user.User', through = 'NearbyComment')
     created_at      = models.DateTimeField(auto_now_add = True) 
     deleted_at      = models.DateTimeField(null = True) 
 
