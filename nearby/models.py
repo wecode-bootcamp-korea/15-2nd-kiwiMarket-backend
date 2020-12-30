@@ -39,7 +39,7 @@ class NearbyImage(models.Model):
         db_table = 'nearbyimages'
 
 class NearbyComment(models.Model):
-    user       = models.ForeignKey('user.User', on_delete = models.SET_NULL, null=True)
+    uploader    = models.ForeignKey('user.User', on_delete = models.SET_NULL, null=True)
     nearby     = models.ForeignKey('Nearby', on_delete = models.SET_NULL, null=True)
     content    = models.CharField(max_length=2000)
     created_at = models.DateTimeField(auto_now = True)
