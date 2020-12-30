@@ -1,7 +1,7 @@
 from phonenumber_field.modelfields import PhoneNumberField
 from django.db import models
 
-from product.models import ProductCategory, Product
+#from product.models import Product
 
 class User(models.Model):
     phone_number    = PhoneNumberField(null=False, blank=False, unique=True)

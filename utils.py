@@ -2,7 +2,6 @@ import json, bcrypt, jwt, re, random
 
 from django.http import JsonResponse
 from my_settings import SECRET_KEY, ALGORITHM
-from user.models import User
 
 def login_check(func):
     def wrapper(self, request, *args, **kwargs):
