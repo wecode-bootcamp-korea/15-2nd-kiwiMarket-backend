@@ -12,11 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-import my_settings
+import my_settings, os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -30,6 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+# 미디어 파일을 위한 스토리지 설정
+DEFAULT_FILE_STORAGE = 'kiwimarket.asset_storage.MediaStorage' 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +44,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'product',
-    'nearby'
+    'nearby',
+    'storages',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -80,7 +84,7 @@ WSGI_APPLICATION = 'kiwimarket.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DATABASES = my_settings.DATABASES
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10000000000000000
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -117,7 +121,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
+
+# MEDIA_URL = ''
+
+# # STATIC_ROOT is the single root directory from where the Django app 
+# # will serve the static files in 'production'. You don't need it on development
+# # All static files are compiled and put in the STATIC_ROOT
+# if not DEBUG:
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles','static_root')
+# # media_root store the user-uploaded media
+# MEDIA_ROOT = '/home/lyla0427/developments/15-2nd-kiwiMarket-backend/staticfiles'
+
+# STATICFILES_DIRS = (
+# os.path.join(BASE_DIR, "static"),
+# )
 
 #REMOVE_APPEND_SLASH_WARNING
 APPEND_SLASH = False
@@ -146,3 +164,25 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
 )
+
+# S3 설정을 위한 변수
+# AWS_xxx 의 변수들은 aws-S3, boto3 모듈을 위한 변수들이다.
+
+# 엑세스 키와 시크릿 키는 다른 파일로 작성, 임포트하여 사용
+AWS_ACCESS_KEY_ID = my_settings.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = my_settings.AWS_SECRET_ACCESS_KEY
+
+AWS_REGION = 'ap-northeast-2'
+AWS_STORAGE_BUCKET_NAME = 'kiwimarket-productimages'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (
+    AWS_STORAGE_BUCKET_NAME, AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_DEFAULT_ACL = 'public-read'
+AWS_LOCATION = 'static'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

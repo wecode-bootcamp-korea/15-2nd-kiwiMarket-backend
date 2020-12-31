@@ -32,12 +32,14 @@ class AuthSms(models.Model):
         db_table = 'authsms'
 
 class Address(models.Model):
-    address    = models.CharField(max_length=20, null=False)
-    code       = models.IntegerField()
-    longitude  = models.DecimalField(max_digits= 9, decimal_places=6) 
-    latitude   = models.DecimalField(max_digits= 9, decimal_places=6)
-    created_at = models.DateTimeField(auto_now_add = True) 
-    deleted_at = models.DateTimeField(null = True) 
+    neighborhood = models.CharField(max_length=20, null=False, default='')
+    region       = models.CharField(max_length=20, null=False, default='')
+    district     = models.CharField(max_length=20, null=False, default='')
+    code         = models.IntegerField()
+    longitude    = models.DecimalField(max_digits= 9, decimal_places=6) 
+    latitude     = models.DecimalField(max_digits= 9, decimal_places=6)
+    created_at   = models.DateTimeField(auto_now_add = True, null = True) 
+    deleted_at   = models.DateTimeField(null = True) 
 
     class Meta:
         db_table = "addresses"
