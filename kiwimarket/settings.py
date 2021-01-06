@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-import my_settings
-import os
-
+import my_settings, os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'product',
-    'nearby'
+    'nearby',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -149,6 +148,27 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 )
 
-# 첨부파일 추가
-MEDIA_URL   = '/media/'
-MEDIA_ROOT  = os.path.join(BASE_DIR, 'media') 
+
+# 미디어 파일을 위한 스토리지 설정
+DEFAULT_FILE_STORAGE = 'kiwimarket.asset_storage.MediaStorage' 
+# S3 설정을 위한 변수
+# AWS_xxx 의 변수들은 aws-S3, boto3 모듈을 위한 변수들이다.
+
+# 엑세스 키와 시크릿 키는 다른 파일로 작성, 임포트하여 사용
+AWS_ACCESS_KEY_ID = my_settings.AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY = my_settings.AWS_SECRET_ACCESS_KEY
+
+AWS_REGION = 'ap-northeast-2'
+AWS_STORAGE_BUCKET_NAME = 'kiwimarket-productimages'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (
+    AWS_STORAGE_BUCKET_NAME, AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_DEFAULT_ACL = 'public-read'
+AWS_LOCATION = 'static'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

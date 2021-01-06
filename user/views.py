@@ -20,7 +20,7 @@ from django.core.exceptions     import ValidationError
 from django.db                  import IntegrityError, transaction
 
 from user.utils         import login_check
-from my_settings        import (service_id, secretKey, AUTH_ACCESS_KEY, AUTH_SECRET_KEY, SMS_SEND_PHONE_NUMBER, SECRET_KEY, ALGORITHM)
+from my_settings        import (service_id, SECRET_KEY, AUTH_ACCESS_KEY_ID, AUTH_SECRET_KEY, SMS_SEND_PHONE_NUMBER, SECRET_KEY, ALGORITHM)
 from user.models        import (
                                 User,
                                 AuthSms,

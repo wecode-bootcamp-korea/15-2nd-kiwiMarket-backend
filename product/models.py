@@ -1,13 +1,12 @@
 from django.db import models
 from django.forms import ModelForm
-
-#from user.models    import User, Address, OrderStatus
+import os
 
 def user_directory_path(instance,filename):
     base_name = os.path.basename(filename)
     name,ext = os.path.splitext(base_name)
 
-    return "note/user/"+ str(instance.note.user.id) + "/"+ str(instance.note.id)+ "/"+"IMG_" + str(instance.note.id)+ext
+    return "product/user/"+ str(instance.product.uploader.id) + "/"+ str(instance.product.id)+ "/"+"IMG_" + str(instance.product.id)+ext
 
 class Product(models.Model):
     name             = models.CharField(max_length=100)
