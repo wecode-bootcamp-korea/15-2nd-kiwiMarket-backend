@@ -24,4 +24,4 @@ urlpatterns = [
     path('/profile', UserProfileView.as_view()),
     path('/orderstatus', OrderStatusView.as_view()),
     path('/changestatus/<int:product_id>', ChangeOrderStatusView.as_view()),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

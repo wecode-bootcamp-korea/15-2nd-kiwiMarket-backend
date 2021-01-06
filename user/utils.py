@@ -7,6 +7,7 @@ from user.models import User
 def login_check(func):
     def wrapper(self, request, *args, **kwargs):
         access_token = request.headers.get('Authorization', None)
+
         try:
             if access_token is None:
                 request.user = None
